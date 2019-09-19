@@ -1,24 +1,20 @@
 #ifndef HELPERS_H
 #define HELPERS_H
 
-#include <math.h>
+#include <cmath>
 #include <string>
 #include <vector>
-
-// for convenience
-using std::string;
-using std::vector;
 
 // Checks if the SocketIO event has JSON data.
 // If there is data the JSON object in string format will be returned,
 //   else the empty string "" will be returned.
-string hasData(string s) {
+std::string hasData(std::string s) {
   auto found_null = s.find("null");
   auto b1 = s.find_first_of("[");
   auto b2 = s.find_first_of("}");
-  if (found_null != string::npos) {
+  if (found_null != std::string::npos) {
     return "";
-  } else if (b1 != string::npos && b2 != string::npos) {
+  } else if (b1 != std::string::npos && b2 != std::string::npos) {
     return s.substr(b1, b2 - b1 + 2);
   }
   return "";
@@ -30,7 +26,7 @@ string hasData(string s) {
 //
 
 // For converting back and forth between radians and degrees.
-constexpr double pi() { return M_PI; }
+constexpr double pi()    { return M_PI;           }
 double deg2rad(double x) { return x * pi() / 180; }
 double rad2deg(double x) { return x * 180 / pi(); }
 
@@ -40,12 +36,12 @@ double distance(double x1, double y1, double x2, double y2) {
 }
 
 // Calculate closest waypoint to current x, y position
-int ClosestWaypoint(double x, double y, const vector<double> &maps_x, 
-                    const vector<double> &maps_y) {
+int ClosestWaypoint(double x, double y, const std::vector<double> &maps_x,
+                    const std::vector<double> &maps_y) {
   double closestLen = 100000; //large number
   int closestWaypoint = 0;
 
-  for (int i = 0; i < maps_x.size(); ++i) {
+  for (size_t i = 0; i < maps_x.size(); ++i) {
     double map_x = maps_x[i];
     double map_y = maps_y[i];
     double dist = distance(x,y,map_x,map_y);
@@ -59,8 +55,9 @@ int ClosestWaypoint(double x, double y, const vector<double> &maps_x,
 }
 
 // Returns next waypoint of the closest waypoint
-int NextWaypoint(double x, double y, double theta, const vector<double> &maps_x, 
-                 const vector<double> &maps_y) {
+int NextWaypoint(double x, double y, double theta,
+                 const std::vector<double> &maps_x,
+                 const std::vector<double> &maps_y) {
   int closestWaypoint = ClosestWaypoint(x,y,maps_x,maps_y);
 
   double map_x = maps_x[closestWaypoint];
@@ -82,9 +79,9 @@ int NextWaypoint(double x, double y, double theta, const vector<double> &maps_x,
 }
 
 // Transform from Cartesian x,y coordinates to Frenet s,d coordinates
-vector<double> getFrenet(double x, double y, double theta, 
-                         const vector<double> &maps_x, 
-                         const vector<double> &maps_y) {
+std::vector<double> getFrenet(double x, double y, double theta,
+                              const std::vector<double> &maps_x,
+                              const std::vector<double> &maps_y) {
   int next_wp = NextWaypoint(x,y, theta, maps_x,maps_y);
 
   int prev_wp;
@@ -106,8 +103,8 @@ vector<double> getFrenet(double x, double y, double theta,
   double frenet_d = distance(x_x,x_y,proj_x,proj_y);
 
   //see if d value is positive or negative by comparing it to a center point
-  double center_x = 1000-maps_x[prev_wp];
-  double center_y = 2000-maps_y[prev_wp];
+  double center_x    = 1000-maps_x[prev_wp];
+  double center_y    = 2000-maps_y[prev_wp];
   double centerToPos = distance(center_x,center_y,x_x,x_y);
   double centerToRef = distance(center_x,center_y,proj_x,proj_y);
 
@@ -127,9 +124,10 @@ vector<double> getFrenet(double x, double y, double theta,
 }
 
 // Transform from Frenet s,d coordinates to Cartesian x,y
-vector<double> getXY(double s, double d, const vector<double> &maps_s, 
-                     const vector<double> &maps_x, 
-                     const vector<double> &maps_y) {
+std::vector<double> getXY(double s, double d,
+                          const std::vector<double> &maps_s,
+                          const std::vector<double> &maps_x,
+                          const std::vector<double> &maps_y) {
   int prev_wp = -1;
 
   while (s > maps_s[prev_wp+1] && (prev_wp < (int)(maps_s.size()-1))) {
@@ -142,7 +140,6 @@ vector<double> getXY(double s, double d, const vector<double> &maps_s,
                          (maps_x[wp2]-maps_x[prev_wp]));
   // the x,y,s along the segment
   double seg_s = (s-maps_s[prev_wp]);
-
   double seg_x = maps_x[prev_wp]+seg_s*cos(heading);
   double seg_y = maps_y[prev_wp]+seg_s*sin(heading);
 
