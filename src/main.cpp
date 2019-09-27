@@ -29,11 +29,8 @@ int main() {
   std::string line;
   while (getline(in_map_, line)) {
     std::istringstream iss(line);
-    double x;
-    double y;
-    float s;
-    float d_x;
-    float d_y;
+    double x, y;
+    float  s, d_x, d_y;
     iss >> x;
     iss >> y;
     iss >> s;
@@ -46,8 +43,11 @@ int main() {
     map_waypoints_dy.push_back(d_y);
   }
 
-  h.onMessage([&map_waypoints_x,&map_waypoints_y,&map_waypoints_s,
-               &map_waypoints_dx,&map_waypoints_dy]
+  h.onMessage([&map_waypoints_x,
+               &map_waypoints_y,
+               &map_waypoints_s,
+               &map_waypoints_dx,
+               &map_waypoints_dy]
               (uWS::WebSocket<uWS::SERVER> ws, char *data, size_t length,
                uWS::OpCode opCode) {
     // "42" at the start of the message means there's a websocket message event.
@@ -77,12 +77,12 @@ int main() {
           auto previous_path_x = j[1]["previous_path_x"];
           auto previous_path_y = j[1]["previous_path_y"];
           // Previous path's end s and d values
-          double end_path_s = j[1]["end_path_s"];
-          double end_path_d = j[1]["end_path_d"];
+          double end_path_s    = j[1]["end_path_s"];
+          double end_path_d    = j[1]["end_path_d"];
 
           // Sensor Fusion Data, a list of all other cars on the same side
           //   of the road.
-          auto sensor_fusion = j[1]["sensor_fusion"];
+          auto sensor_fusion   = j[1]["sensor_fusion"];
 
           nlohmann::json msgJson;
 
@@ -93,7 +93,6 @@ int main() {
            * TODO: define a path made up of (x,y) points that the car will visit
            *   sequentially every .02 seconds
            */
-
 
           msgJson["next_x"] = next_x_vals;
           msgJson["next_y"] = next_y_vals;
@@ -111,20 +110,20 @@ int main() {
   }); // end h.onMessage
 
   h.onConnection([&h](uWS::WebSocket<uWS::SERVER> ws, uWS::HttpRequest req) {
-    std::cout << "Connected!!!" << std::endl;
+    std::cout << "Connected!!!\n";
   });
 
   h.onDisconnection([&h](uWS::WebSocket<uWS::SERVER> ws, int code,
                          char *message, size_t length) {
     ws.close();
-    std::cout << "Disconnected" << std::endl;
+    std::cout << "Disconnected\n";
   });
 
   int port = 4567;
   if (h.listen(port)) {
     std::cout << "Listening to port " << port << std::endl;
   } else {
-    std::cerr << "Failed to listen to port" << std::endl;
+    std::cerr << "Failed to listen to port\n";
     return -1;
   }
 
