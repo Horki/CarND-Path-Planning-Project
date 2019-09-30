@@ -26,6 +26,11 @@ The highway's waypoints loop around so the frenet s value, distance along the ro
 
 Here is the data provided from the Simulator to the C++ Program
 
+## Result
+Car starts at 0mph, in lane "1" (middle lane), increment for acceleration is "0.0224", same constant is used for decrement in acceleration.
+
+![alt text](img/snapshot.png "Result")
+
 #### Main car's localization Data (No Noise)
 
 ["x"] The car's x position in map coordinates
