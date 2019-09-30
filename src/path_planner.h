@@ -208,8 +208,10 @@ public:
 
     check(sensor_fusion, prev_size, car_s);
 
-    auto [pts_x, pts_y] = pts(car_s, car_x, car_y, car_yaw,
-                              previous_path_x, previous_path_y);
+    std::tuple<std::vector<double>, std::vector<double>> result =
+      pts(car_s, car_x, car_y, car_yaw, previous_path_x, previous_path_y);
+    std::vector<double> pts_x = std::get<0>(result);
+    std::vector<double> pts_y = std::get<1>(result);
     // Create a Spline
     tk::spline sp;
     // Set (x, y) points to spline
