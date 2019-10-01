@@ -148,3 +148,16 @@ still be compilable with cmake and make./
 ## How to write a README
 A well written README file can enhance your project and portfolio.  Develop your abilities to create professional README files by completing [this free course](https://www.udacity.com/course/writing-readmes--ud777).
 
+## Valid Trajectories
+
+Criteria | Solution
+--- | ---
+The car is able to drive at least 4.32 miles without incident. | Done. Photo evidence below
+The car drives according to the speed limit. | Done. There is constant PathPlanner::max_speed 49.5 and in PathPlanner::check, we have decrement of reference valocity if it is near speed limit
+Max Acceleration and Jerk are not Exceeded. | Done. None exceeded
+Car does not have collisions | Done. No collisions
+The car stays in its lane, except for the time between changing lanes. | Done. Car starts at lane "1"(middle lane), and doesn't go off out 3 given lanes.
+The car is able to change lanes | Done.
+
+## Solution
+[![IMAGE ALT TEXT HERE](https://img.youtube.com/vi/ncGVONDi9sE/0.jpg)](https://youtu.be/ncGVONDi9sE)
