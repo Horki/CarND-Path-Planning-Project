@@ -111,26 +111,27 @@ private:
     for (size_t i = 0; i < sensor_fusion.size(); ++i) {
       // Car is in my lane
       float d = sensor_fusion[i][6];
-      bool in_same_lane = d < (2 + 4 * lane + 2) && d > (2 + 4 * lane - 2);
       double vx = sensor_fusion[i][3];
       double vy = sensor_fusion[i][4];
       double check_speed = sqrt(pow(vx, 2) + pow(vy, 2));
       double check_car_s = sensor_fusion[i][5];
       check_car_s += (double) prev_size * time_step * check_speed;
-      if (in_same_lane) {
+      if (d < (4 + 4 * lane) && d > (4 * lane)) {
         // check values greater than mine and s gap
         if ((check_car_s > car_s) && ((check_car_s - car_s) < 30)) {
-          // Do some logic
           same_lane_clear = false;
         }
       } else {
-        bool in_left_lane  = d < (4 * lane);
-        bool getting_close = (check_car_s > car_s - 10)
-          && (check_car_s - car_s < 30);
-        if (in_left_lane && getting_close) {
-          left_lane_clear = false;
+        bool is_close = check_car_s > car_s - 10 && check_car_s - car_s < 30;
+        if (d < (4 * lane)) {
+          // left lane
+          if (is_close) {
+            left_lane_clear = false;
+          }
         } else {
-          if (getting_close) right_lane_clear = false;
+          if (is_close) {
+            right_lane_clear = false;
+          }
         }
       }
     }
@@ -189,16 +190,13 @@ public:
     double car_x     = j[1]["x"];
     double car_y     = j[1]["y"];
     double car_s     = j[1]["s"];
-    double car_d     = j[1]["d"];
     double car_yaw   = j[1]["yaw"];
-    double car_speed = j[1]["speed"];
 
     // Previous path data given to the Planner
     auto previous_path_x = j[1]["previous_path_x"];
     auto previous_path_y = j[1]["previous_path_y"];
     // Previous path's end s and d values
     double end_path_s    = j[1]["end_path_s"];
-    double end_path_d    = j[1]["end_path_d"];
     int prev_size        = previous_path_x.size();
     if (prev_size > 0) { car_s = end_path_s; }
 
