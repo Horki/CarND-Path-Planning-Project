@@ -148,7 +148,7 @@ std::vector<double> getXY(double s,
   double seg_x = maps_x[prev_wp] + seg_s * cos(heading);
   double seg_y = maps_y[prev_wp] + seg_s * sin(heading);
 
-  double perp_heading = (heading - pi()) / 2;
+  double perp_heading = heading - (pi() / 2);
 
   double x = seg_x + d * cos(perp_heading);
   double y = seg_y + d * sin(perp_heading);
