@@ -14,9 +14,12 @@ int main() {
   uWS::Hub h;
   // // Waypoint map to read from
   std::string map_file_ = "../data/highway_map.csv";
-  PathPlanner pp(map_file_);
+  // PathPlanner pp(map_file_);
+  Data map(map_file_);
+  int lane = 1;
+  double ref_val = 0.0;
 
-  h.onMessage([&pp]
+  h.onMessage([&map, &lane, &ref_val]
               (uWS::WebSocket<uWS::SERVER> ws, char *data, size_t length,
                uWS::OpCode opCode) {
     // "42" at the start of the message means there's a websocket message event.
@@ -32,7 +35,7 @@ int main() {
         std::string event = j[0].get<std::string>();
 
         if (event == "telemetry") {
-          nlohmann::json msgJson = pp.parse(s);
+          nlohmann::json msgJson = parse_data(map, s, lane, ref_val);
 
           auto msg = "42[\"control\","+ msgJson.dump()+"]";
 
