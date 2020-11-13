@@ -1,4 +1,7 @@
 #! /bin/bash
+
+set -ex
+
 brew install openssl libuv cmake zlib
 git submodule update --init
 cd uWebSockets
